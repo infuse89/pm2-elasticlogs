@@ -1,0 +1,29 @@
+{
+  "name": "pm2-elasticlogs",
+  "version": "0.0.1",
+  "description": "Insert pm2 logs to elasticsearch",
+  "main": "app.js",
+  "dependencies": {
+    "pmx" : "0.6.8",
+    "elasticsearch": "11.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/infuse89/pm2-elasticlogs.git"
+  },
+  "config" : {
+    "elasticsearch_host" : "http://localhost:9200",
+    "elasticsearch_index" : "logs",
+    "app_name" : "all"
+  },
+  "apps" : [{
+    "merge_logs"         : true,
+    "max_memory_restart" : "200M",
+    "script"             : "app.js"
+  }],
+  "author": {
+    "name": "Alexander Ivanov",
+    "email": "infuse89@gmail.com"
+  },
+  "license": "MIT"
+}
