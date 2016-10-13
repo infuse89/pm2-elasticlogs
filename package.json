@@ -5,7 +5,8 @@
   "main": "app.js",
   "dependencies": {
     "pmx" : "0.6.8",
-    "elasticsearch": "11.0.1"
+    "elasticsearch": "11.0.1",
+    "pm2" : "2.0.18"
   },
   "repository": {
     "type": "git",

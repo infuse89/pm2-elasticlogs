@@ -101,7 +101,6 @@ class ElasticLib {
      * @param cb
      */
     create(body, type='logs') {
-        console.log(body);
         body.added = new Date();
         return elastiCclient.create({
             index: this.index,
