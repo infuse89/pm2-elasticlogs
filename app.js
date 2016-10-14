@@ -2,16 +2,12 @@
 
 const pm2 = require('pm2');
 const pmx = require('pmx');
-const elasticsearch = require('elasticsearch');
-
 const packageJSON =  require('./package');
 const conf = pmx.initModule();
-let elastiCclient = new elasticsearch.Client({
-    host: conf.elasticsearch_host,
-    //  log: 'trace'
-});
+const elasticLibModule = require('./libs/elasticsearch');
+const elasticLib = new elasticLibModule(conf.elasticsearch_host, conf.elasticsearch_index);
 /**
- * Change default host to elasticsearch : pm2 set pm2-logstash:elasticsearch_host 'http://localhost:9200'
+ * Change default host to elasticsearch : pm2 set pm2-elasticlogs:elasticsearch_host 'http://localhost:9200'
  *
  *   Start module in development mode
  *          $ pm2 install .
@@ -32,82 +28,3 @@ pm2.Client.launchBus(function(err, bus) {
         }).catch((e) => {console.error(e)});
     });
 });
-
-
-class ElasticLib {
-    constructor(host, index){
-        this.elasticClient = new elasticsearch.Client({
-            host: host || 'http://localhost:9200',
-        });
-        this.index = index || 'logs';
-        this.types = ['logs'];
-        this.createIndex();
-    }
-
-    createIndex(){
-        /**
-         * Create index and mapping if index no exist
-         */
-        return elastiCclient.indices.exists({index:this.index})
-        .then(responseExist => {
-            if(responseExist === true)
-                return;
-            return elastiCclient.indices.create({
-                index: this.index
-            }).then(() => {
-                return Promise.all(this.types.map(type => {
-                    return this.existType(type)
-                        .then(response => {
-                            if(response === false)
-                                return this.createType(type);
-                            return;
-                        })
-                }));
-            });
-        }).catch(error => {
-            console.log(error);
-        });
-    }
-
-    /**
-     * Check exist type
-     */
-    existType (type){
-        return elastiCclient.indices.existsType({index:this.index, type : type});
-    }
-
-    /**
-     * Create type
-     * @param name
-     * @returns {*}
-     */
-    createType(name){
-        let body = {
-            "_routing" : {
-                "required": false
-            },
-            properties:{
-                added  : { "type" : "date" },
-            }
-        }
-        return elastiCclient.indices.putMapping({index: this.index, type: name, body: body});
-    }
-
-    /**
-     * Create fields to search
-     * @param type
-     * @param id
-     * @param body
-     * @param cb
-     */
-    create(body, type='logs') {
-        body.added = new Date();
-        return elastiCclient.create({
-            index: this.index,
-            type: type,
-            body: body
-        });
-    }
-}
-
-let elasticLib = new ElasticLib(conf.elasticsearch_host, conf.elasticsearch_index);

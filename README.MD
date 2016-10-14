@@ -5,7 +5,7 @@ PM2 module to send logs to elasticsearch
 ```bash
 $ npm install pm2 -g
 
-$ pm2 install .
+$ pm2 install pm2-elasticlogs
 ```
 
 To modify the config values you can use the following commands:
@@ -25,7 +25,7 @@ pm2 set pm2-elasticlogs:app_name all
 ## Uninstall
 
 ```bash
-$ pm2 uninstall pm2-server-monit
+$ pm2 uninstall pm2-elasticlogs
 ```
 
 # License
