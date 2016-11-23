@@ -1,6 +1,6 @@
 {
   "name": "pm2-elasticlogs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Insert pm2 logs to elasticsearch",
   "main": "app.js",
   "dependencies": {
