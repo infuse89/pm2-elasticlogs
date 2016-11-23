@@ -66,9 +66,9 @@ class ElasticLib {
      * @param body
      * @param cb
      */
-    create(body, type='logs') {
+    add(body, type='logs') {
         body.added = new Date();
-        return this.elasticClient.create({
+        return this.elasticClient.index({
             index: this.index,
             type: type,
             body: body

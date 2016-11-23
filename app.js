@@ -21,7 +21,7 @@ pm2.Client.launchBus(function(err, bus) {
 
         if (typeof(packet.data) == 'string')
             packet.data = packet.data.replace(/(\r\n|\n|\r)/gm,'');
-        elasticLib.create({
+        elasticLib.add({
             message : packet.data,
             application : packet.process.name,
             process_id : packet.process.pm_id,
